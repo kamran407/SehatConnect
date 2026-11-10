@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SehatConnect | Healthcare Platform</title>
+<style>
+:root{
+ --primary:#176b87;--dark:#073b50;--teal:#64ccc5;
+ --bg:#f3f9fb;--white:#fff;--text:#354d57;
+ --muted:#71858d;--border:#e3edf0;--red:#c34b4b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+.container{max-width:1150px;margin:auto;padding:25px 20px 60px}
+.brand{font-size:25px;font-weight:800;color:var(--primary)}
+.brand span{color:var(--teal)}
+.btn{padding:12px 18px;border-radius:9px;background:var(--primary);color:white;font-weight:700;transition:.2s}
+.btn:hover{background:var(--dark);transform:translateY(-2px)}
+.btn-light{background:#e8f5f6;color:var(--primary)}
+.btn-danger{background:#fff0f0;color:var(--red)}
+.btn-small{padding:9px 13px;font-size:13px}
+.muted{color:var(--muted);font-size:14px;line-height:1.6}
+.section-title{font-size:25px;color:var(--dark);margin:28px 0 17px}
+.card{background:white;padding:22px;border:1px solid var(--border);border-radius:15px;box-shadow:0 5px 20px #06394b0a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.field{margin:15px 0}
+.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}
+.field input,.field select,.field textarea{
+ width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;
+ outline:none;background:white;color:var(--text)
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary)}
+.auth{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;background:linear-gradient(135deg,#073b50,#176b87,#64ccc5)}
+.auth-card{background:white;width:100%;max-width:450px;padding:32px;border-radius:19px;box-shadow:0 15px 45px #00334430}
+.auth-card h2{color:var(--dark);margin:22px 0 8px}
+.full{width:100%;margin-top:12px}
+.switch{text-align:center;margin-top:18px;font-size:14px}
+.switch button{background:none;color:var(--primary);font-weight:bold}
+.message{font-size:13px;color:var(--red);margin-top:10px}
+header{background:white;position:sticky;top:0;z-index:20;box-shadow:0 3px 15px #00334412}
+.header-inner{max-width:1200px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+nav{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+nav button{background:none;padding:10px 11px;border-radius:8px;color:var(--text);font-size:13px;font-weight:700}
+nav button:hover,nav button.active{background:#e8f5f6;color:var(--primary)}
+.hero{padding:45px;border-radius:20px;background:linear-gradient(110deg,#073b50,#176b87);color:white;display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden}
+.hero h1{font-size:clamp(30px,5vw,46px);line-height:1.18;margin-bottom:15px}
+.hero p{max-width:560px;line-height:1.7;color:#e1f3f5}
+.hero-art{width:170px;height:170px;border-radius:50%;background:#ffffff18;display:grid;place-items:center;font-size:90px;flex-shrink:0}
+.stat{font-size:29px;color:var(--primary);font-weight:bold;margin-bottom:7px}
+.icon{font-size:34px}
+.doctor-avatar{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:#e4f5f5;font-size:40px;margin-bottom:12px}
+.tag{display:inline-block;background:#e8f7f6;color:#176b70;border-radius:20px;padding:6px 10px;font-size:12px;font-weight:bold}
+.card h3{color:var(--dark);margin:10px 0}
+.card p{font-size:14px;line-height:1.6;color:var(--muted)}
+.card .btn{margin-top:14px}
+.panel{background:white;border:1px solid var(--border);border-radius:15px;padding:24px;margin-top:18px}
+.panel h2{color:var(--dark);margin-bottom:12px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 18px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.appointment{padding:16px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.status{font-size:12px;background:#e7f7ec;color:#277544;padding:7px 11px;border-radius:20px}
+.empty{text-align:center;padding:35px;color:var(--muted)}
+.searchbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.searchbar input,.searchbar select{padding:12px;border:1px solid var(--border);border-radius:8px;flex:1;min-width:180px}
+.faq-item{padding:15px 0;border-bottom:1px solid var(--border)}
+.faq-item h3{font-size:15px;color:var(--dark);margin-bottom:7px}
+footer{text-align:center;padding:28px;color:var(--muted);font-size:13px}
+.notice{padding:13px;background:#fff8e7;color:#795b20;border-radius:9px;font-size:13px;line-height:1.6;margin-top:15px}
+footer a{color:var(--primary)}
+@media(max-width:760px){
+ .header-inner{align-items:flex-start;flex-direction:column}
+ nav{width:100%;overflow-x:auto;flex-wrap:nowrap}
+ nav button{white-space:nowrap}
+ .hero{padding:28px;flex-direction:column;align-items:flex-start}
+ .hero-art{width:100px;height:100px;font-size:55px}
+ .auth-card{padding:24px}
+}
+
+/* Marham-inspired public landing page */
+.public-home{background:#f5fbff;min-height:100vh}
+.public-nav{background:#fff;box-shadow:0 2px 14px #12384b0c;position:sticky;top:0;z-index:30}
+.public-nav-inner{max-width:1200px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.public-links{display:flex;gap:22px;align-items:center;color:#345}
+.public-links a{color:#345;text-decoration:none;font-size:14px;font-weight:600}
+.public-hero{max-width:1200px;margin:30px auto;padding:48px 30px;border-radius:24px;background:linear-gradient(120deg,#e7f6ff,#f4fbff 60%,#e1f8f5);display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.public-hero h1{font-size:clamp(32px,4vw,52px);line-height:1.15;color:#123e63;margin:0 0 15px}
+.public-hero p{color:#60788a;font-size:17px;line-height:1.65;max-width:600px}
+.public-search{display:flex;gap:10px;background:white;padding:10px;border-radius:13px;box-shadow:0 10px 30px #15537a12;margin-top:24px;max-width:650px}
+.public-search input{flex:1;min-width:0;border:0;outline:0;padding:12px}
+.public-hero-art{font-size:145px;text-align:center;filter:drop-shadow(0 14px 20px #6ab4c333)}
+.public-wrap{max-width:1150px;margin:35px auto;padding:0 20px}
+.public-heading{font-size:27px;color:#123e63;margin:0 0 8px}
+.public-sub{color:#718697;margin-bottom:22px}
+.specialty-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.specialty{background:white;border:1px solid #e5eff5;border-radius:15px;padding:20px 10px;text-align:center;color:#174b72;font-weight:700;box-shadow:0 5px 18px #164e7008}
+.specialty span{display:block;font-size:31px;margin-bottom:10px}
+.public-doctors{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.public-doctor{background:white;border:1px solid #e5eff5;border-radius:16px;padding:20px;display:flex;gap:15px;align-items:center}
+.public-doctor .avatar{width:68px;height:68px;border-radius:50%;background:#e7f5fb;display:grid;place-items:center;font-size:35px;flex-shrink:0}
+.public-doctor h3{color:#173f60;margin-bottom:5px;font-size:17px}
+.public-doctor p{color:#7a8d9b;font-size:13px;line-height:1.5}
+.public-cta{background:#155d85;color:white;border-radius:18px;padding:30px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.public-cta h2{font-size:25px;margin-bottom:8px}
+.public-cta p{color:#dceef6}
+.public-footer{padding:30px;text-align:center;color:#8295a3;font-size:13px}
+@media(max-width:800px){.public-hero{margin:15px;padding:30px 22px;grid-template-columns:1fr}.public-hero-art{font-size:85px}.public-links{gap:10px}.public-links a:nth-child(1),.public-links a:nth-child(2){display:none}.specialty-grid{grid-template-columns:repeat(3,1fr)}.public-doctors{grid-template-columns:1fr}.public-search{flex-direction:column}.public-search input{width:100%}.public-cta{flex-direction:column;align-items:flex-start}}
+
+
+/* Refined healthcare marketplace styling */
+:root{--primary:#0878a5;--dark:#103b61;--teal:#36c6b5;--bg:#f5f9fc;--text:#314b60;--muted:#71869a;--border:#e4edf4}
+body{background:#f5f9fc;font-family:Inter,Segoe UI,Arial,sans-serif}
+.btn{border-radius:11px;box-shadow:0 6px 15px #0878a51a}
+.public-nav-inner{max-width:1240px}
+.public-hero{box-shadow:0 18px 45px #15537a10;border:1px solid #e3f0f8;min-height:350px}
+.public-hero-art{background:radial-gradient(circle,#fff 0%,#d7f3f5 55%,transparent 70%);border-radius:50%;padding:18px}
+.public-search{border:1px solid #e6eef5}
+.specialty{transition:.2s;cursor:pointer}.specialty:hover{transform:translateY(-4px);box-shadow:0 12px 25px #164e7012}
+.public-doctor{box-shadow:0 8px 25px #164e7008;transition:.2s}.public-doctor:hover{transform:translateY(-3px)}
+.public-doctor .avatar{background:linear-gradient(145deg,#e3f6ff,#e0faf4)}
+.market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.market-card{background:#fff;border:1px solid #e4edf4;border-radius:18px;padding:24px;box-shadow:0 8px 24px #174d7008}
+.market-icon{height:58px;width:58px;border-radius:16px;background:#e8f7fb;display:grid;place-items:center;font-size:30px;margin-bottom:14px}
+.delivery-banner{background:linear-gradient(115deg,#e4f8f4,#edf7ff);border:1px solid #d8f0eb;border-radius:20px;padding:28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.public-links a:hover{color:#0878a5}
+@media(max-width:800px){.market-grid{grid-template-columns:1fr}.delivery-banner{flex-direction:column;align-items:flex-start}}
+
+/* Premium animated SehatConnect refresh */
+:root{--primary:#0879a8;--dark:#123b62;--teal:#31c6b4;--accent:#ffb45c}
+html{scroll-behavior:smooth}body{overflow-x:hidden}
+.public-nav{backdrop-filter:blur(14px);background:rgba(255,255,255,.92)}
+.public-nav-inner .brand{letter-spacing:-.7px}
+.public-hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(125deg,#e8f7ff 0%,#f7fcff 48%,#e4faf4 100%);animation:heroIn .8s ease both}
+.public-hero:before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;background:#bdebf4;opacity:.25;right:-90px;top:-140px;z-index:-1}
+.public-hero h1{letter-spacing:-1.7px}
+.public-hero-art{position:relative;min-height:250px;display:grid;place-items:center;filter:none;background:none!important;padding:0!important}
+.hero-doctor-illustration{font-size:130px;z-index:2;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 18px 20px #1c7c9c28)}
+.hero-orbit{position:absolute;border:1px dashed #7acbd1;border-radius:50%;animation:spin 18s linear infinite}
+.orbit-one{width:245px;height:245px}.orbit-two{width:190px;height:190px;animation-direction:reverse;animation-duration:13s}
+.float-badge{position:absolute;background:#fff;padding:11px 15px;border-radius:14px;box-shadow:0 12px 28px #15537a18;font-size:13px;font-weight:700;color:#24516c;animation:float 3.8s ease-in-out infinite}
+.badge-top{top:25px;right:0}.badge-bottom{bottom:25px;left:0;animation-delay:1s}
+.public-search{transition:.25s;box-shadow:0 10px 30px #15537a12}.public-search:focus-within{box-shadow:0 14px 36px #0878a526;transform:translateY(-2px)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:20px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:#0b91a5;display:block;margin-bottom:9px}
+.section-chip{border-radius:99px;background:#e5f8f5;color:#187d79;padding:9px 14px;font-size:12px;font-weight:800;white-space:nowrap}
+.public-doctors{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.doctor-card{position:relative;overflow:hidden;border:1px solid #e5eff5;border-radius:20px;background:#fff;padding:0;box-shadow:0 8px 28px #164e7009;transition:transform .35s,box-shadow .35s;animation:cardIn .65s both}
+.doctor-card:hover{transform:translateY(-8px);box-shadow:0 22px 45px #164e7018}
+.doctor-card-top{height:105px;background:linear-gradient(120deg,#e7f6ff,#e7fbf5);position:relative}
+.doctor-card-top:after{content:"";position:absolute;width:125px;height:125px;border:1px solid #ffffffa8;border-radius:50%;right:-20px;top:-45px}
+.doctor-photo{width:88px;height:88px;border:5px solid white;border-radius:50%;position:absolute;bottom:-40px;left:22px;background:linear-gradient(145deg,#bde7f6,#d5f8ee);display:grid;place-items:center;font-size:43px;box-shadow:0 5px 18px #123b6218}
+.doctor-card-body{padding:48px 21px 22px}
+.doctor-card h3{font-size:19px;color:#143d60;margin:0 0 7px}
+.doctor-role{color:#087da3;font-size:13px;font-weight:700;margin-bottom:9px}
+.doctor-qualification{font-size:12px;color:#72879a;margin-bottom:14px}
+.doctor-stats{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.doctor-stat{font-size:11px;background:#f2f8fb;color:#44647a;border-radius:8px;padding:7px 9px}
+.doctor-clinic{font-size:12px;color:#71869a;line-height:1.55;min-height:36px}
+.doctor-actions{display:flex;gap:8px;margin-top:17px}
+.doctor-actions .btn{flex:1;text-align:center}
+.profile-btn{background:#f0f7fb;color:#0878a5;box-shadow:none}
+.verified-dot{display:inline-flex;align-items:center;gap:4px;color:#168e78;font-size:11px;font-weight:700}
+.profile-modal{position:fixed;inset:0;background:#0a2a4080;backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.profile-modal.show{display:flex;animation:fadeIn .2s}
+.profile-dialog{background:#fff;width:min(720px,100%);max-height:90vh;overflow:auto;border-radius:24px;box-shadow:0 30px 90px #062b4538;animation:modalIn .35s ease}
+.profile-head{padding:28px;background:linear-gradient(120deg,#e6f6ff,#e8fbf5);display:flex;gap:20px;align-items:center;position:relative}
+.profile-head .doctor-photo{position:static;flex-shrink:0;width:100px;height:100px;font-size:50px}
+.profile-head h2{color:#123b62;margin:0 0 7px}.profile-head p{color:#54738a;font-size:14px}
+.modal-close{position:absolute;right:18px;top:15px;border:0;background:#ffffffb8;border-radius:50%;width:34px;height:34px;font-size:20px;color:#345;cursor:pointer}
+.profile-content{padding:26px}.profile-info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.profile-info{padding:15px;background:#f6fafc;border-radius:12px}
+.profile-info small{display:block;color:#7a8fa0;font-size:11px;margin-bottom:6px}.profile-info strong{color:#214c6b;font-size:14px}
+.profile-content h3{color:#173f60;margin:20px 0 8px}.profile-content p{color:#657f91;font-size:14px;line-height:1.7}
+.profile-footer{display:flex;justify-content:flex-end;padding:0 26px 26px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+.market-card{transition:transform .3s,box-shadow .3s}.market-card:hover{transform:translateY(-6px);box-shadow:0 18px 35px #174d7018}
+.delivery-banner{position:relative;overflow:hidden}.public-cta{box-shadow:0 15px 35px #155d851b;transition:transform .3s}.public-cta:hover{transform:translateY(-3px)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:900px){.public-doctors{grid-template-columns:repeat(2,minmax(0,1fr))}.public-hero-art{min-height:210px}}
+@media(max-width:600px){.public-doctors{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.public-hero-art{min-height:180px}.hero-doctor-illustration{font-size:100px}.orbit-one{width:180px;height:180px}.orbit-two{width:145px;height:145px}.badge-top{right:2px}.badge-bottom{left:2px}.profile-head{padding:24px 18px;gap:12px}.profile-head .doctor-photo{width:76px;height:76px;font-size:38px}.profile-info-grid{grid-template-columns:1fr 1fr}.profile-content{padding:20px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+/* ===== SehatConnect Modern Blue Refresh ===== */
+:root{--primary:#1769e8;--dark:#102a56;--teal:#22c7b8;--accent:#7c5cff;--bg:#f4f8ff;--text:#304663;--muted:#71839b;--border:#e4ecf8}
+body{background:radial-gradient(circle at 10% 5%,#eaf3ff 0,transparent 28%),#f6f9ff;color:var(--text)}
+.brand{color:#1769e8}.brand span{color:#22c7b8}
+.btn{background:linear-gradient(135deg,#1769e8,#0c9bc7);border-radius:12px;box-shadow:0 9px 22px #1769e826;transition:transform .25s,box-shadow .25s}
+.btn:hover{background:linear-gradient(135deg,#124fc0,#087ca5);transform:translateY(-3px);box-shadow:0 14px 28px #1769e83b}
+.public-nav{background:#ffffffd9!important;backdrop-filter:blur(18px);border-bottom:1px solid #e8effa}
+.public-nav-inner{padding-top:18px;padding-bottom:18px}
+.public-links a{transition:color .2s}
+.public-hero{position:relative;border:1px solid #dceaff!important;border-radius:30px!important;background:linear-gradient(125deg,#e8f2ff 0%,#f8fbff 48%,#e5fbf7 100%)!important;box-shadow:0 24px 65px #245a9b13!important;padding:clamp(28px,5vw,60px)!important}
+.public-hero:after{content:"";position:absolute;left:-90px;bottom:-150px;width:300px;height:300px;border-radius:50%;background:#8db7ff22;z-index:-1}
+.public-hero h1{color:#102a56!important;letter-spacing:-2px}
+.public-hero p{color:#5c718d!important}
+.public-hero-art{min-height:300px!important}
+.hero-doctor-illustration{font-size:145px!important;filter:drop-shadow(0 20px 24px #2468a52c)!important}
+.hero-orbit{border-color:#7bb9f5!important}
+.float-badge{border:1px solid #e8f0fb;box-shadow:0 15px 35px #164e7018!important;border-radius:16px!important}
+.tag,.section-chip{background:#e5f5ff;color:#1269a0}
+.public-heading{letter-spacing:-.7px}
+.specialty{border:1px solid #e1ebf8!important;border-radius:18px!important;box-shadow:0 10px 25px #174d7008!important;transition:all .3s!important}
+.specialty:hover{transform:translateY(-7px) scale(1.02)!important;border-color:#a9d2ff!important;box-shadow:0 18px 35px #1769e81c!important}
+.doctor-card,.market-card{border:1px solid #e2ebf8!important;border-radius:22px!important;box-shadow:0 12px 32px #174d700b!important}
+.doctor-card-top{background:linear-gradient(135deg,#e4f0ff,#e3fbf5)!important}
+.doctor-photo{background:linear-gradient(135deg,#c8e2ff,#c9f5e9)!important}
+.market-icon{background:linear-gradient(135deg,#e7f2ff,#e5fbf5);border-radius:18px}
+.delivery-banner{border-radius:24px!important;background:linear-gradient(120deg,#e5f8f4,#eaf3ff)!important}
+.public-cta{border-radius:24px!important;background:linear-gradient(120deg,#123b70,#1769b8)!important}
+.card,.panel{border-radius:20px;box-shadow:0 12px 32px #123b620a}
+header{backdrop-filter:blur(15px)}
+/* reveal-on-scroll */
+.reveal{opacity:0;transform:translateY(32px) scale(.985);transition:opacity .75s cubic-bezier(.2,.7,.2,1),transform .75s cubic-bezier(.2,.7,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0) scale(1)}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .7s ease,transform .7s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.public-wrap{padding-top:18px;padding-bottom:18px}
+.section-photo{width:100%;height:190px;object-fit:cover;border-radius:16px;margin:0 0 15px;display:block}
+.image-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.image-tile{overflow:hidden;border-radius:20px;background:white;border:1px solid #e4edf8;box-shadow:0 12px 28px #123b620c}
+.image-tile img{width:100%;height:155px;object-fit:cover;display:block;transition:transform .5s}
+.image-tile:hover img{transform:scale(1.06)}
+.image-tile div{padding:15px;font-weight:700;color:#183e67}
+@media(max-width:650px){.image-strip{grid-template-columns:1fr}.image-tile img{height:190px}.public-hero{margin:12px!important}.hero-doctor-illustration{font-size:100px!important}}
+@media(prefers-reduced-motion:reduce){.reveal,.reveal-left,.reveal-right{opacity:1;transform:none;transition:none}}
+
+
+/* Video consultation feature */
+.video-consult-section{margin:34px auto;max-width:1200px;padding:0 22px}
+.video-consult-card{position:relative;overflow:hidden;display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;padding:clamp(25px,4vw,48px);border-radius:26px;background:linear-gradient(125deg,#102d59,#176b91 58%,#24a69a);color:#fff;box-shadow:0 22px 55px #125b851f}
+.video-consult-card h2{font-size:clamp(27px,3vw,39px);line-height:1.15;margin:12px 0}
+.video-consult-card p{color:#e0f5ff;line-height:1.7;max-width:560px}
+.video-consult-points{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.video-consult-points span{background:#ffffff20;border:1px solid #ffffff35;padding:9px 12px;border-radius:999px;font-size:13px}
+.video-consult-art{min-height:230px;display:grid;place-items:center;position:relative}
+.video-call-window{width:min(100%,290px);height:190px;border:8px solid #ffffff24;border-radius:22px;background:linear-gradient(145deg,#d8f6ff,#a8e8dc);display:grid;place-items:center;font-size:90px;box-shadow:0 18px 45px #061c3733;transform:rotate(3deg)}
+.video-call-window:after{content:"●  ●  ●";position:absolute;bottom:12px;left:18px;font-size:14px;letter-spacing:8px;color:#176b91}
+.video-call-badge{position:absolute;right:0;bottom:18px;background:#fff;color:#12617d;border-radius:14px;padding:12px 16px;font-weight:800;box-shadow:0 10px 28px #062d4430}
+.video-consult-card .btn{background:#fff;color:#145477;font-weight:800;border:0}
+.video-consult-note{font-size:12px!important;color:#cceaf5!important;margin-top:12px}
+@media(max-width:700px){.video-consult-card{grid-template-columns:1fr}.video-consult-art{min-height:190px}.video-call-window{height:160px}}
+
+
+/* ===== Mobile responsive repair (phones and small tablets) ===== */
+html, body {width:100%; max-width:100%; overflow-x:hidden;}
+*, *::before, *::after {box-sizing:border-box;}
+img, video, iframe, svg {max-width:100%;}
+.public-home, main, section {min-width:0; max-width:100%;}
+.public-nav {width:100%; max-width:100%; overflow:visible;}
+.public-nav-inner {
+  width:100%; max-width:100%; min-width:0;
+  padding:12px 16px; gap:10px; flex-wrap:wrap;
+}
+.public-nav-inner > * {min-width:0;}
+.public-links {
+  min-width:0; max-width:100%; flex:1 1 100%;
+  display:flex; flex-wrap:wrap; gap:8px 14px;
+}
+.public-links a {white-space:nowrap; font-size:13px;}
+.public-hero {
+  width:calc(100% - 24px); max-width:100%;
+  min-width:0; margin:14px auto; padding:26px 18px;
+  grid-template-columns:minmax(0,1fr); gap:18px;
+}
+.public-hero > * {min-width:0; max-width:100%;}
+.public-hero h1 {font-size:clamp(29px,8vw,42px); overflow-wrap:anywhere;}
+.public-hero p {font-size:16px; overflow-wrap:anywhere;}
+.public-search {width:100%; max-width:100%; min-width:0; flex-direction:column;}
+.public-search input {width:100%; min-width:0; max-width:100%;}
+.public-search button, .public-search .btn {width:100%; max-width:100%;}
+.public-hero-art {width:100%; min-width:0; min-height:175px; font-size:85px;}
+.public-wrap, .video-consult-section {
+  width:100%; max-width:100%; min-width:0;
+  margin-left:auto; margin-right:auto; padding-left:14px; padding-right:14px;
+}
+.specialty-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+.public-doctors {grid-template-columns:minmax(0,1fr);}
+.market-grid {grid-template-columns:minmax(0,1fr);}
+.delivery-banner, .public-cta, .video-consult-card {min-width:0; max-width:100%;}
+.video-consult-card {grid-template-columns:minmax(0,1fr); padding:24px 18px;}
+.video-consult-art {width:100%; min-width:0;}
+.card, .panel, .market-card, .public-doctor {min-width:0; max-width:100%;}
+input, select, textarea, button {max-width:100%;}
+.container {width:100%; max-width:100%; padding-left:14px; padding-right:14px;}
+@media (max-width:480px) {
+  .public-nav-inner {padding:10px 14px;}
+  .public-nav-inner .brand {font-size:23px; white-space:nowrap;}
+  .public-links {overflow-x:auto; flex-wrap:nowrap; padding:3px 0 7px;}
+  .public-links a {flex:0 0 auto;}
+  .public-hero {width:calc(100% - 20px); padding:23px 16px;}
+  .public-hero h1 {font-size:30px; letter-spacing:-.8px;}
+  .public-hero p {font-size:15px; line-height:1.55;}
+  .public-hero-art {min-height:145px; font-size:72px;}
+  .float-badge {font-size:11px; padding:8px 10px;}
+  .badge-top {right:0; top:8px;}
+  .badge-bottom {left:0; bottom:8px;}
+  .section-head {align-items:flex-start; flex-direction:column;}
+  .specialty-grid {gap:10px;}
+  .specialty {padding:15px 7px; font-size:13px;}
+  .video-consult-card h2 {font-size:29px;}
+  .doctor-actions {flex-wrap:wrap;}
+  .doctor-actions .btn {min-width:0;}
+}
+
+</style>
+</head>
+<body>
+
+
+<div id="publicHome" class="public-home">
+ <div class="public-nav"><div class="public-nav-inner">
+  <div class="brand">Sehat<span>Connect</span></div>
+  <div class="public-links"><a href="#specialties">Specialties</a><a href="#videoConsult">Video Consult</a><a href="#topDoctors">Doctors</a><a href="#pharmacy">Medicines</a><a href="#delivery">Home Delivery</a>
+   <button class="btn btn-light btn-small" onclick="openLogin()">Login</button><button class="btn btn-small" onclick="openSignup()">Sign Up</button>
+  </div>
+ </div></div>
+ <section class="public-hero">
+  <div><span class="tag">Your health, one connection away</span>
+   <h1>Find the right doctor.<br>Feel better, sooner.</h1>
+   <p>Find trusted care, explore medical specialties, and order medicines from one convenient healthcare platform.</p>
+   <div class="public-search"><input id="publicDoctorSearch" placeholder="Search doctor or specialty (e.g. Skin, Physician)"><button class="btn" onclick="publicSearch()">Search Doctors →</button></div>
+  </div><div class="public-hero-art"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-doctor-illustration">🩺</div><div class="float-badge badge-top">✚ Trusted care</div><div class="float-badge badge-bottom">♡ Your health first</div></div>
+ </section>
+ <section class="public-wrap" id="specialties"><h2 class="public-heading">Explore Medical Specialties</h2><p class="public-sub">Care for every stage of life, all in one place</p>
+  <div class="specialty-grid">
+   <div class="specialty" onclick="publicSearchSpecialty('Physician')"><span>🩺</span>Physician</div>
+   <div class="specialty" onclick="publicSearchSpecialty('Neonatologist')"><span>👶</span>Neonatology</div>
+   <div class="specialty" onclick="publicSearchSpecialty('Dermatologist')"><span>🧴</span>Skin / Dermatology</div>
+   <div class="specialty" onclick="publicSearchSpecialty('Psychiatrist')"><span>🧠</span>Psychiatry</div>
+   <div class="specialty" onclick="publicSearchSpecialty('Dentist')"><span>🦷</span>Dentistry (BDS)</div>
+   <div class="specialty" onclick="publicSearchSpecialty('General Medicine')"><span>💊</span>General Medicine</div>
+  </div>
+ </section>
+ <section class="video-consult-section reveal" id="videoConsult">
+  <div class="video-consult-card">
+   <div>
+    <span class="tag" style="background:#ffffff20;color:#fff;border:1px solid #ffffff35">ONLINE CONSULTATION</span>
+    <h2>Talk to a doctor.<br>From anywhere.</h2>
+    <p>Connect with qualified doctors through a convenient video consultation—no travel, just care from the comfort of your home.</p>
+    <div class="video-consult-points"><span>📱 At home</span><span>🔒 Private conversation</span><span>🗓️ Flexible booking</span></div>
+    <button class="btn" onclick="bookVideoConsultation()">Book Video Consultation →</button>
+    <p class="video-consult-note">Appointment requests are saved in this browser. Video calling will be available after secure video-service integration.</p>
+   </div>
+   <div class="video-consult-art"><div class="video-call-window">👨‍⚕️</div><div class="video-call-badge">● Video Call Ready</div></div>
+  </div>
+ </section>
+ <section class="public-wrap reveal" id="topDoctors"><div class="section-head"><div><span class="eyebrow">OUR MEDICAL TEAM</span><h2 class="public-heading">Meet Our Featured Doctors</h2><p class="public-sub">Explore doctor profiles, experience, qualifications and clinic details.</p></div><span class="section-chip">6 specialists</span></div>
+  <div class="public-doctors" id="featuredDoctors"></div>
+ </section>
+ <section class="public-wrap" id="pharmacy"><h2 class="public-heading">Medicine & Pharmacy</h2><p class="public-sub">Convenient medicine ordering in a few simple steps</p>
+  <div class="market-grid">
+   <div class="market-card"><div class="market-icon">💊</div><h3>Browse Medicines</h3><p class="muted">Search medicine names and submit a medicine request through your account.</p><button class="btn btn-small" onclick="openSignup()">Explore Medicines</button></div>
+   <div class="market-card"><div class="market-icon">🧾</div><h3>Upload / Share Prescription</h3><p class="muted">Keep your prescription ready and provide its details with your order request.</p><button class="btn btn-small btn-light" onclick="openSignup()">Order with Prescription</button></div>
+   <div class="market-card"><div class="market-icon">🚚</div><h3>Medicine Home Delivery</h3><p class="muted">Add your delivery address and contact number to request delivery.</p><button class="btn btn-small" onclick="openSignup()">Request Delivery</button></div>
+  </div>
+ </section>
+ <section class="public-wrap" id="delivery"><div class="delivery-banner"><div><span class="tag">Easy & convenient</span><h2 class="public-heading" style="margin-top:12px">Healthcare delivered to your doorstep</h2><p class="public-sub" style="margin:8px 0 0">Request medicines and enter your delivery details after creating an account.</p></div><div style="font-size:70px">📦🚚</div></div></section>
+ <section class="public-wrap" id="howItWorks"><div class="public-cta"><div><h2>Your healthcare journey starts here</h2><p>Create an account to book doctors and submit medicine delivery requests.</p></div><button class="btn" style="background:#64ccc5;color:#073b50" onclick="openSignup()">Get Started →</button></div></section>
+ <div class="public-footer">© 2026 SehatConnect · Healthcare & Medicine Platform</div>
+</div>
+
+<!-- Doctor profile modal -->
+<div class="profile-modal" id="doctorProfileModal" onclick="if(event.target===this)closeDoctorProfile()">
+ <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profileModalName">
+  <div class="profile-head"><button class="modal-close" onclick="closeDoctorProfile()" aria-label="Close">×</button><div class="doctor-photo" id="modalAvatar">👨‍⚕️</div><div><span class="verified-dot">● Sample profile</span><h2 id="profileModalName">Doctor Name</h2><p id="profileModalSpecialty">Specialty</p></div></div>
+  <div class="profile-content"><div class="profile-info-grid" id="profileInfoGrid"></div><h3>About Doctor</h3><p id="profileBio"></p><h3>Services & Areas of Interest</h3><p id="profileServices"></p><h3>Clinic & Availability</h3><p id="profileClinic"></p></div>
+  <div class="profile-footer"><button class="btn" id="modalBookButton">Book Appointment →</button></div>
+ </div>
+</div>
+
+<!-- LOGIN -->
+<section id="loginPage" class="auth hidden">
+<div class="auth-card">
+<div class="brand">Sehat<span>Connect</span></div>
+<p class="muted">Your health, your connection.</p>
+<h2>Welcome Back!</h2>
+<p class="muted">Login to access your account.</p>
+<form id="loginForm">
+<div class="field"><label>Email Address</label><input id="loginEmail" type="email" required placeholder="Enter email"></div>
+<div class="field"><label>Password</label><input id="loginPassword" type="password" required placeholder="Enter password"></div>
+<button class="btn full">Login</button>
+<p id="loginMessage" class="message"></p>
+</form>
+<div class="switch">New here? <button onclick="showSignup()">Create Account</button></div>
+</div>
+</section>
+
+<!-- SIGN UP -->
+<section id="signupPage" class="auth hidden">
+<div class="auth-card">
+<div class="brand">Sehat<span>Connect</span></div>
+<h2>Create Account</h2>
+<p class="muted">Create your SehatConnect account to get started.</p>
+<form id="signupForm">
+<div class="field"><label>Full Name</label><input id="regName" required placeholder="Your full name"></div>
+<div class="field"><label>Email</label><input id="regEmail" type="email" required placeholder="Your email"></div>
+<div class="field"><label>Phone Number</label><input id="regPhone" type="tel" required placeholder="Your phone number"></div>
+<div class="field"><label>Password</label><input id="regPassword" type="password" minlength="6" required placeholder="At least 6 characters"></div>
+<div class="field"><label>Confirm Password</label><input id="regConfirm" type="password" required placeholder="Confirm password"></div>
+<button class="btn full">Create Account</button>
+<p id="signupMessage" class="message"></p>
+</form>
+<div class="switch">Already registered? <button onclick="showLogin()">Login</button></div>
+</div>
+</section>
+
+<!-- MAIN APPLICATION -->
+<div id="appPage" class="hidden">
+<header>
+<div class="header-inner">
+<div class="brand">Sehat<span>Connect</span></div>
+<nav>
+<button onclick="showSection('home')">Home</button>
+<button onclick="showSection('doctors')">Doctors</button>
+<button onclick="showSection('booking')">Book</button>
+<button onclick="showSection('appointments')">Appointments</button>
+<button onclick="showSection('medicines')">Medicines</button>
+<button onclick="showSection('profile')">Profile</button>
+<button onclick="showSection('about')">About</button>
+<button onclick="showSection('contact')">Contact</button>
+<button onclick="showSection('faq')">FAQ</button>
+<button onclick="showSection('admin')">Admin Dashboard</button>
+<button onclick="logout()">Logout</button>
+</nav>
+</div>
+</header>
+
+<main class="container">
+
+<!-- HOME -->
+<section id="homeSection">
+<div class="hero">
+<div>
+<h1>Healthcare made simple and accessible.</h1>
+<p>Discover healthcare professionals, explore specialties and manage your appointment requests through one simple platform.</p>
+<button class="btn" style="background:#64ccc5;color:#073b50;margin-top:20px" onclick="showSection('doctors')">Find a Doctor →</button>
+</div>
+<div class="hero-art">🩺</div>
+</div>
+
+<h2 class="section-title">Welcome, <span id="welcomeName">User</span>!</h2>
+<div class="grid">
+<div class="card"><div class="icon">👨‍⚕️</div><h3>Find a Doctor</h3><p>Explore sample profiles by medical specialty.</p><button class="btn btn-small" onclick="showSection('doctors')">Explore</button></div>
+<div class="card"><div class="icon">📅</div><h3>Book Appointment</h3><p>Submit an appointment request.</p><button class="btn btn-small" onclick="showSection('booking')">Book Now</button></div>
+<div class="card"><div class="icon">📋</div><h3>My Appointments</h3><p>Review your saved appointment requests.</p><button class="btn btn-small" onclick="showSection('appointments')">View</button></div>
+<div class="card"><div class="icon">👤</div><h3>My Profile</h3><p>View and update your account details.</p><button class="btn btn-small" onclick="showSection('profile')">Profile</button></div>
+</div>
+<h2 class="section-title">Your Activity</h2>
+<div class="grid">
+<div class="card"><div class="stat" id="totalAppointments">0</div><p>Appointment requests</p></div>
+<div class="card"><div class="stat" id="activeAppointments">0</div><p>Active requests</p></div>
+</div>
+</section>
+
+<!-- DOCTORS -->
+<section id="doctorsSection" class="hidden">
+<h2 class="section-title">Find a Doctor</h2>
+<p class="muted">Search sample healthcare professional profiles by name or specialty.</p>
+<div class="searchbar">
+<input id="doctorSearch" placeholder="Search doctor or specialty..." oninput="renderDoctors()">
+<select id="specialtyFilter" onchange="renderDoctors()">
+<option value="">All Specialties</option>
+<option>Physician</option><option>Neonatologist</option><option>Dermatologist</option><option>Psychiatrist</option><option>Dentist (BDS)</option><option>General Medicine</option>
+</select>
+</div>
+<div class="grid" id="doctorGrid"></div>
+<div class="notice">All doctor names and profiles on this page are fictional examples for the platform. They are not verified healthcare providers.</div>
+</section>
+
+<!-- BOOKING -->
+<section id="bookingSection" class="hidden">
+<h2 class="section-title">Book an Appointment</h2>
+<div class="panel">
+<h2>Appointment Request Form</h2>
+<p class="muted">Complete this form to submit your appointment request.</p>
+<form id="bookingForm">
+<div class="form-grid">
+<div class="field"><label>Full Name</label><input id="patientName" required></div>
+<div class="field"><label>Select Doctor</label>
+<select id="doctorSelect" required>
+<option value="">Choose a doctor</option>
+<option>Dr. Ahmed Khan</option><option>Dr. Sara Ali</option><option>Dr. Usman Malik</option><option>Dr. Ilyas Ahmed</option><option>Dr. Ayesha Noor</option><option>Dr. Bilal Shah</option>
+</select></div>
+<div class="field"><label>Appointment Date</label><input id="appointmentDate" type="date" required></div>
+<div class="field"><label>Preferred Time</label><select id="appointmentTime" required>
+<option value="">Choose a time</option><option>10:00 AM</option><option>12:00 PM</option><option>3:00 PM</option><option>5:00 PM</option>
+</select></div>
+<div class="field"><label>Consultation Type</label><select id="consultType" required>
+<option value="">Select type</option><option>Clinic Visit</option><option>Video Consultation</option><option>Appointment Request</option>
+</select></div>
+</div>
+<button class="btn">Submit Appointment Request</button>
+<p id="bookingMessage" class="message"></p>
+</form>
+</div>
+</section>
+
+<!-- MEDICINES -->
+<section id="medicinesSection" class="hidden">
+ <h2 class="section-title">Medicine Order & Home Delivery</h2>
+ <div class="panel"><h2>Medicine Request Form</h2><p class="muted">Submit your medicine request and delivery details.</p>
+ <form id="medicineForm"><div class="form-grid">
+  <div class="field"><label>Medicine Name</label><input id="medicineName" required placeholder="Enter medicine name"></div>
+  <div class="field"><label>Quantity</label><input id="medicineQty" type="number" min="1" value="1" required></div>
+  <div class="field"><label>Prescription Required?</label><select id="medicinePrescription"><option>Yes, prescription available</option><option>No / OTC medicine</option><option>Need guidance</option></select></div>
+  <div class="field"><label>Contact Number</label><input id="deliveryPhone" type="tel" required placeholder="03xx-xxxxxxx"></div>
+  <div class="field" style="grid-column:1/-1"><label>Home Delivery Address</label><textarea id="deliveryAddress" rows="3" required placeholder="House, street, area, city"></textarea></div>
+ </div><button class="btn">Submit Medicine Request</button><p id="medicineMessage" class="message"></p></form>
+ <div class="notice">For safety, prescription medicines should only be supplied after a valid prescription is verified. Medicine requests are recorded for review; online payment and delivery processing are not yet connected.</div>
+ </div><div class="panel"><h2>My Medicine Requests</h2><div id="medicineOrdersList" class="empty">Your requests will appear here.</div></div>
+</section>
+
+<!-- APPOINTMENTS -->
+<section id="appointmentsSection" class="hidden">
+<h2 class="section-title">My Appointments</h2>
+<div class="panel"><div id="appointmentList"></div></div>
+</section>
+
+<!-- CONSULTATION -->
+<section id="consultSection" class="hidden">
+<h2 class="section-title">Healthcare Services</h2>
+<div class="panel" style="text-align:center;padding:40px 20px">
+<div style="font-size:65px">💻</div>
+<h2>Doctor Services</h2>
+<p class="muted">Explore additional services offered through the SehatConnect platform.</p>
+<div style="background:#eaf5f7;border-radius:12px;padding:30px;margin:20px auto;max-width:500px">
+<div style="font-size:50px">👨‍⚕️</div>
+<h3>Doctor Services Area</h3>
+<p class="muted">Sample service interface only.</p>
+</div>
+<button class="btn" onclick="alert('Video calling is not connected yet. Please use appointment booking to request a consultation.')">Request Video Consultation</button>
+</div>
+</section>
+
+<!-- PROFILE -->
+<section id="profileSection" class="hidden">
+<h2 class="section-title">My Profile</h2>
+<div class="panel">
+<h2>Account Information</h2>
+<form id="profileForm">
+<div class="field"><label>Full Name</label><input id="profileName" required></div>
+<div class="field"><label>Email Address</label><input id="profileEmail" type="email" disabled></div>
+<div class="field"><label>Phone Number</label><input id="profilePhone" required></div>
+<button class="btn">Update Profile</button>
+<p id="profileMessage" class="message"></p>
+</form>
+</div>
+</section>
+
+<!-- ABOUT -->
+<section id="aboutSection" class="hidden">
+<h2 class="section-title">About SehatConnect</h2>
+<div class="panel">
+<h2>Connecting People With Healthcare Information</h2>
+<p class="muted">SehatConnect is a healthcare platform concept that helps people explore healthcare professionals, request appointments and access convenient online health services.</p>
+<div class="grid" style="margin-top:20px">
+<div class="card"><div class="icon">🎯</div><h3>Our Purpose</h3><p>Make healthcare platform navigation simple and understandable.</p></div>
+<div class="card"><div class="icon">🤝</div><h3>Our Approach</h3><p>Provide a clear interface for exploring doctor profiles and services.</p></div>
+<div class="card"><div class="icon">💡</div><h3>Our Vision</h3><p>Make healthcare information and appointment access more convenient.</p></div>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contactSection" class="hidden">
+<h2 class="section-title">Contact Us</h2>
+<div class="panel">
+<h2>Send Feedback</h2>
+<p class="muted">Share your feedback about this student project.</p>
+<form id="contactForm">
+<div class="field"><label>Your Name</label><input id="contactName" required></div>
+<div class="field"><label>Email</label><input id="contactEmail" type="email" required></div>
+<div class="field"><label>Message</label><textarea id="contactText" rows="4" required></textarea></div>
+<button class="btn">Save Feedback</button>
+<p id="contactMessage" class="message"></p>
+</form>
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faqSection" class="hidden">
+<h2 class="section-title">Frequently Asked Questions</h2>
+<div class="panel">
+<div class="faq-item"><h3>What is SehatConnect?</h3><p class="muted">SehatConnect helps users explore healthcare services and submit appointment requests.</p></div>
+<div class="faq-item"><h3>How can I book an appointment?</h3><p class="muted">Open Find Doctors or Book Appointment and complete the appointment form.</p></div>
+<div class="faq-item"><h3>Can I order medicines?</h3><p class="muted">You can submit a medicine request and delivery address. Order processing and delivery integration are not yet available.</p></div>
+<div class="faq-item"><h3>Are the doctors real?</h3><p class="muted">No. The doctor profiles are fictional sample content.</p></div>
+<div class="faq-item"><h3>Where is my information saved?</h3><p class="muted">Some account and appointment information is saved in this browser.</p></div>
+</div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="adminSection" class="hidden">
+<h2 class="section-title">Admin Dashboard</h2>
+<div class="notice">Administrative access is a prototype and is not yet secured for real patient records.</div>
+<div class="grid" style="margin-top:18px">
+<div class="card"><div class="stat" id="adminTotal">0</div><p>Total appointment requests</p></div>
+<div class="card"><div class="stat" id="adminUsers">0</div><p>Registered accounts</p></div>
+</div>
+<div class="panel">
+<h2>Appointment Requests</h2>
+<div id="adminList"></div>
+</div>
+</section>
+
+</main>
+<footer>© 2026 SehatConnect | Student Web Application Project</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+const doctors = [
+ {id:0,name:"Dr. Ahmed Khan",specialty:"Physician",about:"General health assessment, common illnesses and preventive care.",icon:"👨‍⚕️",qualification:"MBBS, FCPS (Medicine)",experience:"12 years",fee:"Rs. 1,500",rating:"4.8 / 5",reviews:"120 reviews",clinic:"SehatConnect Medical Centre",location:"Clifton, Karachi",hours:"Mon–Sat · 5:00 PM–9:00 PM",services:["General check-up","Diabetes & blood pressure care","Fever and infections","Preventive health advice"],bio:"A sample consultant physician profile focused on accessible, patient-centred general medical care. This profile is fictional and provided as example profile information."},
+ {id:1,name:"Dr. Sara Ali",specialty:"Neonatologist",about:"Specialist newborn care and neonatal health.",icon:"👩‍⚕️",qualification:"MBBS, FCPS (Paediatrics), Fellowship (Neonatology)",experience:"9 years",fee:"Rs. 2,000",rating:"4.9 / 5",reviews:"86 reviews",clinic:"SehatConnect Children’s Clinic",location:"Gulshan-e-Iqbal, Karachi",hours:"Mon–Fri · 4:00 PM–8:00 PM",services:["Newborn assessment","Premature baby follow-up","Feeding & growth guidance","Neonatal follow-up"],bio:"A fictional neonatology profile provided as example profile information for newborn-care services."},
+ {id:2,name:"Dr. Usman Malik",specialty:"Dermatologist",about:"Skin, hair and nail care consultations.",icon:"👨‍⚕️",qualification:"MBBS, FCPS (Dermatology)",experience:"10 years",fee:"Rs. 1,800",rating:"4.7 / 5",reviews:"94 reviews",clinic:"SehatConnect Skin Studio",location:"North Nazimabad, Karachi",hours:"Tue–Sun · 3:00 PM–8:00 PM",services:["Acne & skin care","Hair fall assessment","Eczema & allergies","Skin health consultation"],bio:"A fictional dermatology profile with sample services and clinic details for the platform."},
+ {id:3,name:"Dr. Ilyas Ahmed",specialty:"Psychiatrist",about:"Mental health assessment and treatment support.",icon:"🧠",qualification:"MBBS, FCPS (Psychiatry)",experience:"14 years",fee:"Rs. 2,500",rating:"4.9 / 5",reviews:"150 reviews",clinic:"SehatConnect Mental Wellness Clinic",location:"PECHS, Karachi",hours:"Mon–Sat · 4:00 PM–9:00 PM",services:["Anxiety & stress","Depression assessment","Sleep concerns","Psychiatric consultation"],bio:"A fictional psychiatrist profile designed to show mental-health services in a respectful, confidential and supportive setting."},
+ {id:4,name:"Dr. Ayesha Noor",specialty:"Dentist (BDS)",about:"Dental check-ups and oral health care.",icon:"🦷",qualification:"BDS, FCPS (Operative Dentistry) — sample",experience:"8 years",fee:"Rs. 1,200",rating:"4.8 / 5",reviews:"72 reviews",clinic:"SehatConnect Dental Care",location:"Bahadurabad, Karachi",hours:"Mon–Sat · 2:00 PM–7:00 PM",services:["Dental examination","Scaling & polishing","Tooth pain assessment","Oral hygiene guidance"],bio:"A fictional BDS dentist profile provided as example profile information for dental services."},
+ {id:5,name:"Dr. Bilal Shah",specialty:"General Medicine",about:"Everyday medical concerns and health guidance.",icon:"🩺",qualification:"MBBS, MCPS (Family Medicine) — sample",experience:"7 years",fee:"Rs. 1,000",rating:"4.6 / 5",reviews:"58 reviews",clinic:"SehatConnect Family Clinic",location:"Malir, Karachi",hours:"Mon–Fri · 6:00 PM–10:00 PM",services:["General consultation","Seasonal illnesses","Medication review","Basic health screening"],bio:"A fictional general-medicine profile with sample clinic information for the SehatConnect demonstration."}
+];
+
+function read(key, fallback = []) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return value ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+function users(){ return read("sc_users", []); }
+function appointments(){ return read("sc_appointments", []); }
+function feedback(){ return read("sc_feedback", []); }
+function currentEmail(){ return sessionStorage.getItem("sc_current_user"); }
+function currentUser(){ return users().find(u => u.email === currentEmail()); }
+function saveUsers(data){ localStorage.setItem("sc_users", JSON.stringify(data)); }
+function saveAppointments(data){ localStorage.setItem("sc_appointments", JSON.stringify(data)); }
+
+
+function openLogin(){
+  $("publicHome").classList.add("hidden");
+  $("signupPage").classList.add("hidden");
+  $("loginPage").classList.remove("hidden");
+}
+function openSignup(){
+  $("publicHome").classList.add("hidden");
+  $("loginPage").classList.add("hidden");
+  $("signupPage").classList.remove("hidden");
+}
+function publicSearchSpecialty(specialty){ $("publicDoctorSearch").value = specialty; publicSearch(); }
+function publicSearch(){
+  const q = $("publicDoctorSearch").value.trim();
+  openLogin();
+  $("loginMessage").textContent = q ? "Login to search doctors for: " + q : "Login to explore doctors.";
+}
+
+function showSignup(){
+  $("loginPage").classList.add("hidden");
+  $("signupPage").classList.remove("hidden");
+  $("signupMessage").textContent = "";
+}
+function showLogin(){
+  $("signupPage").classList.add("hidden");
+  $("loginPage").classList.remove("hidden");
+  $("loginMessage").textContent = "";
+}
+function showApp(user){
+  $("loginPage").classList.add("hidden");
+  $("signupPage").classList.add("hidden");
+  $("appPage").classList.remove("hidden");
+  $("welcomeName").textContent = (user.name || "User").split(" ")[0];
+  $("patientName").value = user.name || "";
+  updateStats();
+  showSection("home");
+}
+function logout(){
+  sessionStorage.removeItem("sc_current_user");
+  $("appPage").classList.add("hidden");
+  $("signupPage").classList.add("hidden");
+  $("loginPage").classList.remove("hidden");
+  $("loginForm").reset();
+  $("loginMessage").textContent = "";
+}
+
+$("signupForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("regName").value.trim();
+  const email = $("regEmail").value.trim().toLowerCase();
+  const phone = $("regPhone").value.trim();
+  const password = $("regPassword").value;
+  if(password !== $("regConfirm").value){
+    $("signupMessage").textContent = "Passwords do not match.";
+    return;
+  }
+  const data = users();
+  if(data.some(u => u.email === email)){
+    $("signupMessage").textContent = "This email is already registered. Please login.";
+    return;
+  }
+  const newUser = {name, email, phone, password};
+  data.push(newUser);
+  saveUsers(data);
+  sessionStorage.setItem("sc_current_user", email);
+  $("signupForm").reset();
+  alert("Your account has been created successfully!");
+  showApp(newUser);
+});
+
+$("loginForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = $("loginEmail").value.trim().toLowerCase();
+  const password = $("loginPassword").value;
+  const user = users().find(u => u.email === email && u.password === password);
+  if(!user){
+    $("loginMessage").textContent = "Email or password is incorrect. Please check or create an account.";
+    return;
+  }
+  sessionStorage.setItem("sc_current_user", email);
+  $("loginForm").reset();
+  showApp(user);
+});
+
+function showSection(name){
+  const pages = ["home","doctors","booking","appointments","consult","medicines","profile","about","contact","faq","admin"];
+  pages.forEach(p => {
+    const section = $(p + "Section");
+    if(section) section.classList.toggle("hidden", p !== name);
+  });
+  document.querySelectorAll("nav button").forEach(btn => btn.classList.remove("active"));
+  const navButton = [...document.querySelectorAll("nav button")].find(btn =>
+    (btn.getAttribute("onclick") || "").includes("'" + name + "'")
+  );
+  if(navButton) navButton.classList.add("active");
+
+  if(name === "doctors") renderDoctors();
+  if(name === "appointments") renderAppointments();
+  if(name === "medicines") renderMedicineOrders();
+  if(name === "profile") loadProfile();
+  if(name === "admin") renderAdmin();
+  if(name === "contact"){
+    const u = currentUser();
+    $("contactName").value = u?.name || "";
+    $("contactEmail").value = u?.email || "";
+  }
+  updateStats();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function renderDoctors(){
+  const query = $("doctorSearch").value.trim().toLowerCase();
+  const specialty = $("specialtyFilter").value;
+  const filtered = doctors.filter(d =>
+    (d.name.toLowerCase().includes(query) || d.specialty.toLowerCase().includes(query)) &&
+    (!specialty || d.specialty === specialty)
+  );
+  $("doctorGrid").innerHTML = filtered.length ? filtered.map((d,i) => `
+    <article class="doctor-card" style="animation-delay:${i*80}ms">
+      <div class="doctor-card-top"><div class="doctor-photo">${d.icon}</div></div>
+      <div class="doctor-card-body">
+       <span class="verified-dot">● Profile preview</span><h3>${d.name}</h3>
+       <div class="doctor-role">${d.specialty}</div><div class="doctor-qualification">${d.qualification}</div>
+       <div class="doctor-stats"><span class="doctor-stat">⌛ ${d.experience}</span><span class="doctor-stat">★ ${d.rating}</span><span class="doctor-stat">Rs. ${d.fee.replace("Rs. ","")}</span></div>
+       <p class="doctor-clinic">🏥 ${d.clinic}<br>📍 ${d.location}</p>
+       <div class="doctor-actions"><button class="btn btn-small profile-btn" onclick="openDoctorProfile(${d.id})">View Profile</button><button class="btn btn-small" onclick="selectDoctor('${d.name}')">Book</button></div>
+      </div>
+    </article>`).join("") : '<div class="empty">No matching doctor profiles found.</div>';
+}
+function openDoctorProfile(id){
+ const d=doctors.find(x=>x.id===id);if(!d)return;
+ $("modalAvatar").textContent=d.icon;$("profileModalName").textContent=d.name;$("profileModalSpecialty").textContent=d.specialty+" · "+d.qualification;
+ $("profileInfoGrid").innerHTML=[["Experience",d.experience],["Consultation Fee",d.fee],["Sample Rating",d.rating],["Sample Reviews",d.reviews],["Clinic",d.clinic],["Location",d.location]].map(([k,v])=>`<div class="profile-info"><small>${k}</small><strong>${v}</strong></div>`).join("");
+ $("profileBio").textContent=d.bio;$("profileServices").textContent=d.services.join(" • ");$("profileClinic").textContent=d.clinic+" — "+d.location+" | "+d.hours;
+ $("modalBookButton").onclick=()=>{closeDoctorProfile();selectDoctor(d.name)};
+ $("doctorProfileModal").classList.add("show");document.body.style.overflow="hidden";
+}
+function closeDoctorProfile(){$("doctorProfileModal").classList.remove("show");document.body.style.overflow=""}
+function bookVideoConsultation(){
+  showSection("booking");
+  $("consultType").value = "Video Consultation";
+  $("bookingMessage").textContent = "Video consultation selected. Choose a doctor, date and time to continue.";
+  $("bookingSection").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function selectDoctor(name){
+  $("doctorSelect").value = name;
+  showSection("booking");
+}
+
+$("bookingForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const user = currentUser();
+  if(!user){
+    $("bookingMessage").textContent = "Please login again before booking.";
+    return;
+  }
+  const date = $("appointmentDate").value;
+  if(date < new Date().toISOString().slice(0,10)){
+    $("bookingMessage").textContent = "Please choose today or a future date.";
+    return;
+  }
+  const list = appointments();
+  list.push({
+    id: Date.now(),
+    email: user.email,
+    patient: $("patientName").value.trim(),
+    doctor: $("doctorSelect").value,
+    date,
+    time: $("appointmentTime").value,
+    type: $("consultType").value,
+    status: "Request saved"
+  });
+  saveAppointments(list);
+  $("bookingForm").reset();
+  $("patientName").value = user.name;
+  $("bookingMessage").textContent = "Your appointment request has been saved in this browser.";
+  updateStats();
+});
+
+function renderAppointments(){
+  const user = currentUser();
+  const mine = appointments().filter(a => a.email === user?.email);
+  $("appointmentList").innerHTML = mine.length ? mine.slice().reverse().map(a => `
+    <div class="appointment">
+      <div>
+        <strong>${escapeHTML(a.doctor)}</strong>
+        <p class="muted">${escapeHTML(a.date)} · ${escapeHTML(a.time)} · ${escapeHTML(a.type)}</p>
+      </div>
+      <span class="status">${escapeHTML(a.status)}</span>
+    </div>
+  `).join("") : '<div class="empty">You have no appointment requests yet.</div>';
+}
+function updateStats(){
+  const user = currentUser();
+  const mine = appointments().filter(a => a.email === user?.email);
+  if($("totalAppointments")) $("totalAppointments").textContent = mine.length;
+  if($("activeAppointments")) $("activeAppointments").textContent = mine.length;
+}
+function loadProfile(){
+  const user = currentUser();
+  if(!user) return;
+  $("profileName").value = user.name || "";
+  $("profileEmail").value = user.email || "";
+  $("profilePhone").value = user.phone || "";
+}
+$("profileForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const data = users();
+  const index = data.findIndex(u => u.email === currentEmail());
+  if(index < 0) return;
+  data[index].name = $("profileName").value.trim();
+  data[index].phone = $("profilePhone").value.trim();
+  saveUsers(data);
+  $("welcomeName").textContent = data[index].name.split(" ")[0];
+  $("patientName").value = data[index].name;
+  $("profileMessage").textContent = "Your profile has been updated.";
+});
+
+function medicineOrders(){ return read("sc_medicine_orders", []); }
+$("medicineForm").addEventListener("submit", (e) => {
+ e.preventDefault(); const user=currentUser(); if(!user){$("medicineMessage").textContent="Please login to submit a request.";return;}
+ const orders=medicineOrders(); orders.push({id:Date.now(),email:user.email,name:$ ("medicineName").value.trim(),qty:$ ("medicineQty").value,prescription:$ ("medicinePrescription").value,phone:$ ("deliveryPhone").value.trim(),address:$ ("deliveryAddress").value.trim(),status:"Request saved"});
+ localStorage.setItem("sc_medicine_orders",JSON.stringify(orders)); $("medicineForm").reset(); $("medicineMessage").textContent="Your medicine request has been saved in this browser.";renderMedicineOrders();
+});
+function renderMedicineOrders(){ const user=currentUser();const mine=medicineOrders().filter(o=>o.email===user?.email);const el=$("medicineOrdersList");if(!el)return;el.innerHTML=mine.length?mine.slice().reverse().map(o=>`<div class="appointment"><div><strong>${escapeHTML(o.name)} × ${escapeHTML(o.qty)}</strong><p class="muted">${escapeHTML(o.address)} · ${escapeHTML(o.phone)}</p></div><span class="status">${escapeHTML(o.status)}</span></div>`).join(""):'<div class="empty">No medicine requests yet.</div>'; }
+
+$("contactForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const list = feedback();
+  list.push({
+    name: $("contactName").value.trim(),
+    email: $("contactEmail").value.trim(),
+    message: $("contactText").value.trim(),
+    date: new Date().toLocaleString()
+  });
+  localStorage.setItem("sc_feedback", JSON.stringify(list));
+  $("contactForm").reset();
+  $("contactMessage").textContent = "Thank you! Your feedback has been saved in this browser.";
+});
+
+function renderAdmin(){
+  const allAppointments = appointments();
+  $("adminTotal").textContent = allAppointments.length;
+  $("adminUsers").textContent = users().length;
+  $("adminList").innerHTML = allAppointments.length ? allAppointments.slice().reverse().map(a => `
+    <div class="appointment">
+      <div>
+        <strong>${escapeHTML(a.patient)} — ${escapeHTML(a.doctor)}</strong>
+        <p class="muted">${escapeHTML(a.date)} · ${escapeHTML(a.time)} · ${escapeHTML(a.email)}</p>
+      </div>
+      <span class="status">${escapeHTML(a.status)}</span>
+    </div>
+  `).join("") : '<div class="empty">No appointment requests yet.</div>';
+}
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
+
+// If the page is refreshed while logged in, restore the saved session.
+window.addEventListener("DOMContentLoaded", () => {
+  const featured=$("featuredDoctors");
+  if(featured) featured.innerHTML=doctors.map((d,i)=>`<article class="doctor-card" style="animation-delay:${i*90}ms"><div class="doctor-card-top"><div class="doctor-photo">${d.icon}</div></div><div class="doctor-card-body"><span class="verified-dot">● Profile preview</span><h3>${d.name}</h3><div class="doctor-role">${d.specialty}</div><div class="doctor-qualification">${d.qualification}</div><div class="doctor-stats"><span class="doctor-stat">⌛ ${d.experience}</span><span class="doctor-stat">★ ${d.rating}</span><span class="doctor-stat">${d.fee}</span></div><p class="doctor-clinic">🏥 ${d.clinic}<br>📍 ${d.location}</p><div class="doctor-actions"><button class="btn btn-small profile-btn" onclick="openDoctorProfile(${d.id})">View Profile</button><button class="btn btn-small" onclick="openSignup()">Book</button></div></div></article>`).join("");
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target)}}),{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+  const user = currentUser();
+  if(user) showApp(user);
+  const dateInput = $("appointmentDate");
+  if(dateInput) dateInput.min = new Date().toISOString().slice(0,10);
+});
+</script>
+<script>
+
+/* Scroll animations: reveal sections/cards as they enter the viewport */
+(function(){
+ const revealTargets = document.querySelectorAll('.public-wrap, .delivery-banner, .public-cta, .market-card, .specialty, .doctor-card');
+ revealTargets.forEach((el,i)=>{ if(!el.classList.contains('reveal')) el.classList.add('reveal'); el.style.transitionDelay=(Math.min(i%6,5)*70)+'ms'; });
+ if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(entries=>entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add('visible');io.unobserve(entry.target);}
+  }),{threshold:.12,rootMargin:'0px 0px -35px 0px'});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>io.observe(el));
+ }else document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>el.classList.add('visible'));
+})();
+
+</script>
+</body>
+</html>
